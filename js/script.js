@@ -22,7 +22,7 @@ $('#design').on('change', function() {
     if (selectedShirtDesign === "js puns") {
         $('.iLoveJS').hide();
     }
-    if (shirtDesign === "heart js") {
+    if (selectedShirtDesign === "heart js") {
         $('.jsPuns').hide();
     }
 });
@@ -39,3 +39,8 @@ $('.activities').on('change', (e) => {
         totalPrice -= cost;
     }
 });
+
+
+function disableConflictingTimes(time) {
+    const listOfTimes = $('input[data-day-and-time]');
+}
