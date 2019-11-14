@@ -41,8 +41,11 @@ $('.activities').on('change', (e) => {
 });
 
 
-function disableConflictingTimes(time) {
-    let selectedTime = extractDateObjects(time);
+
+function disableConflictingTimes(event) {
+
+
+    let selectedTime = extractDateObjects(event.dataset.dayAndTime);
 
     const $elementList = $('input[data-day-and-time]');
     $elementList.each(function(index, value) {
