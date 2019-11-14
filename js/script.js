@@ -45,12 +45,40 @@ $('.activities').on('change', (e) => {
 
 //when activity is selected, disable conflicting activities
 $('fieldset.activities').on('change', (event) => {
-    let target = event.target;
+    /* let target = event.target;
     if (target.checked) {
         toggleDisabledOnConflictingActivities(true, target);
     } else {
         toggleDisabledOnConflictingActivities(false, target);
+    } */
+
+    
+    const $elementList = $('input[data-day-and-time]');
+    let checkedList = [];
+    $elementList.each(function(index, value) {
+        if (value.checked === true) {
+            checkedList.push(true);
+            value.checked = false;
+        } else {
+            checkedList.push(false);
+        }   
+    });
+
+
+    for (let i = 0; i < checkedList.length; i++) {
+        if (checkedList[i] === true) {
+            toggleDisabledOnConflictingActivities(true, $elementList[i]);
+        } else {
+            toggleDisabledOnConflictingActivities(false, $elementList[i]);
+        }
     }
+
+    $elementList.each((index, value) => {
+        if (checkedList[index] === true) {
+            value.checked = true;
+        }
+    })
+
     
 });
 
@@ -71,7 +99,7 @@ function toggleDisabledOnConflictingActivities(disable, activity) {
                 if (disable) {
                     value.setAttribute("disabled", ""); //adds disabled attr
                     value.parentElement.style.color = 'grey';
-                    value.checked = false;
+                    //value.checked = false;
                 } else {
                     value.removeAttribute("disabled"); //removes disabled attr
                     value.parentElement.style.color = 'black';
