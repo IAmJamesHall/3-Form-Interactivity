@@ -12,18 +12,18 @@ $('#design').on('change', function() {
 
     const selectedShirtDesign = $('#design :selected').val();
     //show all items in dropdown menu
-    $('.jsPuns').show();
-    $('.iLoveJS').show();
+    $('.js-puns').show();
+    $('.i-love-js').show();
     //reset selected option
 
     $('#color').val('chooseColor');
 
     //selectively hide options based on what is selected
     if (selectedShirtDesign === "js puns") {
-        $('.iLoveJS').hide();
+        $('.i-love-js').hide();
     }
     if (selectedShirtDesign === "heart js") {
-        $('.jsPuns').hide();
+        $('.js-puns').hide();
     }
 });
 
@@ -38,8 +38,12 @@ $('.activities').on('change', (e) => {
     } else {
         totalPrice -= cost;
     }
+    console.log($('h3#payment-total'));
+    console.log(totalPrice);
+    $('#payment-total').html('$' + totalPrice);
 });
 
+//when activity is selected, disable conflicting activities
 $('fieldset.activities').on('change', (event) => {
     let target = event.target;
     if (target.checked) {
@@ -47,6 +51,7 @@ $('fieldset.activities').on('change', (event) => {
     } else {
         toggleDisabledOnConflictingActivities(false, target);
     }
+    
 });
 
 // this function works except when the "Main Conference" box is checked. 
@@ -66,6 +71,7 @@ function toggleDisabledOnConflictingActivities(disable, activity) {
                 if (disable) {
                     value.setAttribute("disabled", ""); //adds disabled attr
                     value.parentElement.style.color = 'grey';
+                    value.checked = false;
                 } else {
                     value.removeAttribute("disabled"); //removes disabled attr
                     value.parentElement.style.color = 'black';
