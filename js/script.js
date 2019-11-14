@@ -49,11 +49,15 @@ $('fieldset.activities').on('change', (event) => {
     }
 });
 
-// this function works except when the "Main Conference" box is checkedd. 
+// this function works except when the "Main Conference" box is checked. 
 // Something to look into.
+
+//DOC: this function disables all other possible activities that fill that time slot
+//     in the "register for activities" section. It accepts two arguments:
+//     - disable: a flag that tells the function to either disable or enable conflicting argument
+//     - activity: the activity that all other activities will be tested against
 function toggleDisabledOnConflictingActivities(disable, activity) {
     let selectedActivity = extractDateObjects(activity.dataset.dayAndTime);
-
     const $elementList = $('input[data-day-and-time]');
     $elementList.each(function (index, value) {
         if (activity != value) {
@@ -61,8 +65,10 @@ function toggleDisabledOnConflictingActivities(disable, activity) {
             if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
                 if (disable) {
                     value.setAttribute("disabled", ""); //adds disabled attr
+                    value.parentElement.style.color = 'grey';
                 } else {
                     value.removeAttribute("disabled"); //removes disabled attr
+                    value.parentElement.style.color = 'black';
                 }
             }
         }
