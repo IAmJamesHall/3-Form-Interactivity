@@ -87,13 +87,14 @@
           JavaScript Frameworks Workshop — Tuesday 9am-12pm, $100
         </label>
         <label>
+            <input type="checkbox" name="express" data-day-and-time="2019-09-19T09:00:00-T12:00:00" data-cost="$100"> 
+            Express Workshop — Tuesday 9am-12pm, $100
+          </label>
+        <label>
           <input type="checkbox" name="js-libs" data-day-and-time="2019-09-19T13:00:00-T16:00:00" data-cost="$100"> 
           JavaScript Libraries Workshop — Tuesday 1pm-4pm, $100
         </label>
-        <label>
-          <input type="checkbox" name="express" data-day-and-time="2019-09-19T09:00:00-T12:00:00" data-cost="$100"> 
-          Express Workshop — Tuesday 9am-12pm, $100
-        </label>
+        
         <label>
           <input type="checkbox" name="node" data-day-and-time="2019-09-19T13:00:00-T16:00:00" data-cost="$100"> 
           Node.js Workshop — Tuesday 1pm-4pm, $100
@@ -122,10 +123,10 @@
 
         <label for="payment">I'm going to pay with:</label>
         <select id="payment" name="user-payment">
-          <option value="select method">Select Payment Method</option>
-          <option value="Credit Card">Credit Card</option>
-          <option value="PayPal">PayPal</option>
-          <option value="Bitcoin">Bitcoin</option>
+          <option value="select-method" disabled>Select Payment Method</option>
+          <option value="credit-card" selected>Credit Card</option>
+          <option value="paypal">PayPal</option>
+          <option value="bitcoin">Bitcoin</option>
         </select>
 
         <div id="credit-card" class="credit-card">

@@ -3,6 +3,10 @@ let totalPrice = 0;
 // focus on name field onload
 $('#name').focus();
 
+// hide BTC & PayPal payment fields
+$('#paypal').hide();
+$('#bitcoin').hide();
+
 // hide other job role field if js is enabled
 $('label[for="other-title"]').hide();
 $('#other-title').hide();
@@ -38,8 +42,6 @@ $('.activities').on('change', (e) => {
     } else {
         totalPrice -= cost;
     }
-    console.log($('h3#payment-total'));
-    console.log(totalPrice);
     $('#payment-total').html('$' + totalPrice);
 });
 
@@ -108,3 +110,19 @@ function disableIfConflicting() {
         activity.parentElement.style.color = 'black';
     }
 }
+
+//when payment method is selected, hide other methods
+$('select#payment').on('change', function() {
+
+    let selected = $('#payment :selected').val();
+    let paymentList = ["credit-card", "paypal", "bitcoin"];
+    for (let i = 0; i < paymentList.length; i++) {
+        $('#' + paymentList[i]).hide();
+    }
+    $('#' + selected).show();
+
+    $('#paypal').html("<p>We'll take you to Paypal's site to set up your billing information when you click “Register” below.</p>");
+    $('#bitcoin').html("<p>Since you selected Bitcoin we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>")
+})
+
+
