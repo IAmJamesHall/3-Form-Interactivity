@@ -49,6 +49,8 @@ $('fieldset.activities').on('change', (event) => {
     }
 });
 
+// this function works except when the "Main Conference" box is checkedd. 
+// Something to look into.
 function toggleDisabledOnConflictingActivities(disable, activity) {
     let selectedActivity = extractDateObjects(activity.dataset.dayAndTime);
 
@@ -68,11 +70,11 @@ function toggleDisabledOnConflictingActivities(disable, activity) {
     })
 
     function extractDateObjects(timeString) {
-        let arbitraryDate = '2019-09-19';
-        let regex = /[A-Za-z]+-(T\d\d:\d\d:\d\d)-(T\d\d:\d\d:\d\d)/g;
+        let regex = /(\d{4}-\d\d-\d\d)(T\d\d:\d\d:\d\d)-(T\d\d:\d\d:\d\d)/g;
         let match = regex.exec(timeString);
-        let startTime = new Date(arbitraryDate + match[1]);
-        let endTime = new Date(arbitraryDate + match[2]);
+        let date = match[1];
+        let startTime = new Date(date + match[2]);
+        let endTime = new Date(date + match[3]);
         return {
             start: startTime,
             end: endTime
