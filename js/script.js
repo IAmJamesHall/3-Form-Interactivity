@@ -42,5 +42,35 @@ $('.activities').on('change', (e) => {
 
 
 function disableConflictingTimes(time) {
-    const listOfTimes = $('input[data-day-and-time]');
+    let selectedTime = extractDateObjects(time);
+
+    const $elementList = $('input[data-day-and-time]');
+    $elementList.each(function(index, value) {
+        let startAndEndTimes = extractDateObjects(value.dataset.dayAndTime);
+        if (checkIfTimeConflicts(selectedTime, startAndEndTimes)) {
+            value.setAttribute("disabled", "");
+        }
+
+    })
+
+    function extractDateObjects(timeString) {
+        let arbitraryDate = '2019-09-19';
+        let regex = /[A-Za-z]+-(T\d\d:\d\d:\d\d)-(T\d\d:\d\d:\d\d)/g;
+        let match = regex.exec(timeString);
+        let startTime = new Date(arbitraryDate + match[1]);
+        let endTime = new Date(arbitraryDate + match[2]);
+        return {
+            start: startTime,
+            end: endTime
+        }
+    }
+
+    function checkIfTimeConflicts(selectedTime, otherTime) {
+        if (selectedTime.start > otherTime.end || selectedTime.end < otherTime.start) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 }
