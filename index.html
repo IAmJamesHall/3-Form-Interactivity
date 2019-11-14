@@ -21,11 +21,11 @@
       <fieldset>         
         <legend>Basic Info</legend>
         
-        <label for="name">Name:</label>
+        <label for="name">Name: (required)</label>
         <input type="text" id="name" name="user-name">
         
-        <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user-email">
+        <label for="mail">Email: (valid email required)</label>
+        <input type="email" id="email" name="user-email">
         
         <label for="title">Job Role</label>
         <select id="title" name="user-title">
@@ -38,7 +38,7 @@
         </select>           
       </fieldset>
 
-      <label for="other-title">Other Job Role</label>
+      <label for="other-title">Other Job Role (type your job role)</label>
       <input type="text" id="other-title" name="other-user-title">
       
       <fieldset class="shirt">
@@ -78,7 +78,7 @@
       </fieldset>
 
       <fieldset class="activities">
-        <legend>Register for Activities</legend>
+        <legend>Register for Activities (at least one required)</legend>
         <label>
           <input type="checkbox" name="all" data-cost="$200"> Main Conference — $200
         </label>
@@ -116,7 +116,7 @@
             Chrome Dev Tools Workshop — Wednesday 8am-5pm, $400
           </label>
           
-         <h3 id="payment-total">$0</h3>         	
+         <h3 id="payment-total"></h3>         	
       </fieldset>
       <fieldset>
         <legend>Payment Info</legend>
