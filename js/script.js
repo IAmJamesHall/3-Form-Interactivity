@@ -40,18 +40,29 @@ $('.activities').on('change', (e) => {
     }
 });
 
+$('fieldset.activities').on('change', (event) => {
+    let target = event.target;
+    if (target.checked) {
+        toggleDisabledOnConflictingActivities(true, target);
+    } else {
+        toggleDisabledOnConflictingActivities(false, target);
+    }
+});
 
-
-function disableConflictingTimes(event) {
-
-
-    let selectedTime = extractDateObjects(event.dataset.dayAndTime);
+function toggleDisabledOnConflictingActivities(disable, activity) {
+    let selectedActivity = extractDateObjects(activity.dataset.dayAndTime);
 
     const $elementList = $('input[data-day-and-time]');
-    $elementList.each(function(index, value) {
-        let startAndEndTimes = extractDateObjects(value.dataset.dayAndTime);
-        if (checkIfTimeConflicts(selectedTime, startAndEndTimes)) {
-            value.setAttribute("disabled", "");
+    $elementList.each(function (index, value) {
+        if (activity != value) {
+            let otherActivity = extractDateObjects(value.dataset.dayAndTime);
+            if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
+                if (disable) {
+                    value.setAttribute("disabled", ""); //adds disabled attr
+                } else {
+                    value.removeAttribute("disabled"); //removes disabled attr
+                }
+            }
         }
 
     })
@@ -68,8 +79,8 @@ function disableConflictingTimes(event) {
         }
     }
 
-    function checkIfTimeConflicts(selectedTime, otherTime) {
-        if (selectedTime.start > otherTime.end || selectedTime.end < otherTime.start) {
+    function checkIfTimeConflicts(selectedActivity, otherActivity) {
+        if (selectedActivity.start > otherActivity.end || selectedActivity.end < otherActivity.start) {
             return false;
         } else {
             return true;
