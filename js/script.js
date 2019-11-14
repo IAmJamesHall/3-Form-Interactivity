@@ -45,69 +45,34 @@ $('.activities').on('change', (e) => {
 
 //when activity is selected, disable conflicting activities
 $('fieldset.activities').on('change', (event) => {
-    /* let target = event.target;
-    if (target.checked) {
-        toggleDisabledOnConflictingActivities(true, target);
-    } else {
-        toggleDisabledOnConflictingActivities(false, target);
-    } */
-
-    
-    const $elementList = $('input[data-day-and-time]');
-    let checkedList = [];
-    $elementList.each(function(index, value) {
-        if (value.checked === true) {
-            checkedList.push(true);
-            value.checked = false;
-        } else {
-            checkedList.push(false);
-        }   
-    });
-
-
-    for (let i = 0; i < checkedList.length; i++) {
-        if (checkedList[i] === true) {
-            toggleDisabledOnConflictingActivities(true, $elementList[i]);
-        } else {
-            toggleDisabledOnConflictingActivities(false, $elementList[i]);
-        }
-    }
-
-    $elementList.each((index, value) => {
-        if (checkedList[index] === true) {
-            value.checked = true;
-        }
-    })
-
-    
+    disableIfConflicting();
 });
 
-// this function works except when the "Main Conference" box is checked. 
-// Something to look into.
 
-//DOC: this function disables all other possible activities that fill that time slot
-//     in the "register for activities" section. It accepts two arguments:
-//     - disable: a flag that tells the function to either disable or enable conflicting argument
-//     - activity: the activity that all other activities will be tested against
-function toggleDisabledOnConflictingActivities(disable, activity) {
-    let selectedActivity = extractDateObjects(activity.dataset.dayAndTime);
+
+function disableIfConflicting() {
     const $elementList = $('input[data-day-and-time]');
-    $elementList.each(function (index, value) {
-        if (activity != value) {
-            let otherActivity = extractDateObjects(value.dataset.dayAndTime);
-            if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
-                if (disable) {
-                    value.setAttribute("disabled", ""); //adds disabled attr
-                    value.parentElement.style.color = 'grey';
-                    //value.checked = false;
-                } else {
-                    value.removeAttribute("disabled"); //removes disabled attr
-                    value.parentElement.style.color = 'black';
-                }
-            }
+    $elementList.each(function(i, selectedActivity) {
+        let selectedShouldBeDisabled = false;
+        if (selectedActivity.checked === false) {
+            $elementList.each(function(j, otherActivity) { 
+                if (otherActivity.checked === true) {
+                    if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
+                        selectedShouldBeDisabled = true;
+                    }
+                }   
+            })
         }
-
+        if (selectedShouldBeDisabled) {
+            disable(selectedActivity);
+            selectedShouldBeDisabled = false;
+        } else {
+            enable(selectedActivity);
+        }
     })
+
+
+
 
     function extractDateObjects(timeString) {
         let regex = /(\d{4}-\d\d-\d\d)(T\d\d:\d\d:\d\d)-(T\d\d:\d\d:\d\d)/g;
@@ -122,11 +87,24 @@ function toggleDisabledOnConflictingActivities(disable, activity) {
     }
 
     function checkIfTimeConflicts(selectedActivity, otherActivity) {
-        if (selectedActivity.start > otherActivity.end || selectedActivity.end < otherActivity.start) {
+        let selectedTimes = extractDateObjects(selectedActivity.dataset.dayAndTime);
+        let otherTimes = extractDateObjects(otherActivity.dataset.dayAndTime);
+        if (selectedTimes.start > otherTimes.end || selectedTimes.end < otherTimes.start) {
             return false;
         } else {
             return true;
         }
 
+    }
+
+
+    function disable(activity) {
+        activity.setAttribute("disabled", ""); //adds disabled attr
+        activity.parentElement.style.color = 'grey';
+    }
+
+    function enable(activity) {
+        activity.removeAttribute("disabled"); //removes disabled attr
+        activity.parentElement.style.color = 'black';
     }
 }
