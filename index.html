@@ -21,11 +21,11 @@
       <fieldset>         
         <legend>Basic Info</legend>
         
-        <label for="name">Name:</label>
+        <label for="name">Name: (required)</label>
         <input type="text" id="name" name="user-name">
         
-        <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user-email">
+        <label for="mail">Email: (valid email required)</label>
+        <input type="email" id="email" name="user-email">
         
         <label for="title">Job Role</label>
         <select id="title" name="user-title">
@@ -38,8 +38,8 @@
         </select>           
       </fieldset>
 
-      <label for="other-title">Other Job Role</label>
-      <input type="text" id="other-title" name="other-user-title">
+      <label for="other-title">Other Job Role (type your job role)</label>
+      <input type="text" id="other-title" name="other-user-title" placeholder="Your Job Role">
       
       <fieldset class="shirt">
         <legend>T-Shirt Info</legend>
@@ -57,7 +57,7 @@
         <div>
           <label for="design" onchange="setShirtColors();">Design:</label>
           <select id="design" name="user-design">
-            <option>Select Theme</option>
+            <option value="select design">Select Design</option>
             <option value="js puns">Theme - JS Puns</option>
             <option value="heart js">Theme - I &#9829; JS</option>
           </select>
@@ -66,7 +66,7 @@
         <div id="colors-js-puns" class="">
           <label for="color">Color:</label>
           <select id="color">
-            <option value="chooseColor">Choose a Color</option>
+            <option value="choose color">Choose a Color</option>
             <option class="js-puns" value="cornflowerblue">Cornflower Blue (JS Puns shirt only)</option>
             <option class="js-puns" value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option> 
             <option class="js-puns" value="gold">Gold (JS Puns shirt only)</option> 
@@ -78,7 +78,7 @@
       </fieldset>
 
       <fieldset class="activities">
-        <legend>Register for Activities</legend>
+        <legend>Register for Activities (at least one required)</legend>
         <label>
           <input type="checkbox" name="all" data-cost="$200"> Main Conference — $200
         </label>
@@ -116,7 +116,7 @@
             Chrome Dev Tools Workshop — Wednesday 8am-5pm, $400
           </label>
           
-         <h3 id="payment-total">$0</h3>         	
+         <h3 id="payment-total"></h3>         	
       </fieldset>
       <fieldset>
         <legend>Payment Info</legend>
