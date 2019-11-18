@@ -1,3 +1,12 @@
+/******************************************
+Treehouse Techdegree:
+FSJS project 3 - Forms Interactivity & Validation
+James Hall
+Nov 18, 2019
+******************************************/
+
+
+//set totalPrice to initial price
 let totalPrice = 0;
 
 
