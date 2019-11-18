@@ -20,7 +20,7 @@ removeDesignFromColorSelector();
 
 
 // shows other job field if 'Other' title is chosen
-$('#title').on('change', function() {
+$('#title').on('change', function () {
     if ($('#title :selected').val() == "other") {
         $('label[for="other-title"]').show();
         $('#other-title').show();
@@ -28,13 +28,13 @@ $('#title').on('change', function() {
         $('label[for="other-title"]').hide();
         $('#other-title').hide();
     }
-    
+
 });
 
 function removeDesignFromColorSelector() {
     const colorRegex = /[\w ♥️]+/;
     const colorSelect = $('select#color');
-    
+
     $('select#color').children().each((index, value) => {
         let text = value.text;
         text = text.replace(/ \([\w ♥️]+\)/, '');
@@ -48,9 +48,9 @@ function removeDesignFromColorSelector() {
 
 
 //when shirt design field in changed, update available colors
-$('#design').on('change', function() {
+$('#design').on('change', function () {
 
-    
+
     const selectedShirtDesign = $('#design :selected').val();
     //show all items in dropdown menu
     $('.js-puns').hide();
@@ -74,14 +74,14 @@ $('#design').on('change', function() {
 
     }
 
-    
+
 });
 
 
 //when activity is selected, add its cost to the totalPrice
 $('.activities').on('change', (e) => {
     let cost = e.target.dataset.cost;
-    cost = parseInt(cost.slice(1,4));
+    cost = parseInt(cost.slice(1, 4));
 
     if (e.target.checked) {
         totalPrice += cost;
@@ -97,18 +97,17 @@ $('fieldset.activities').on('change', (event) => {
 });
 
 
-
 function disableIfConflicting() {
     const $elementList = $('input[data-day-and-time]');
-    $elementList.each(function(i, selectedActivity) {
+    $elementList.each(function (i, selectedActivity) {
         let selectedShouldBeDisabled = false;
         if (selectedActivity.checked === false) {
-            $elementList.each(function(j, otherActivity) { 
+            $elementList.each(function (j, otherActivity) {
                 if (otherActivity.checked === true) {
                     if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
                         selectedShouldBeDisabled = true;
                     }
-                }   
+                }
             })
         }
         if (selectedShouldBeDisabled) {
@@ -118,8 +117,6 @@ function disableIfConflicting() {
             enable(selectedActivity);
         }
     })
-
-
 
 
     function extractDateObjects(timeString) {
@@ -158,7 +155,7 @@ function disableIfConflicting() {
 }
 
 //when payment method is selected, hide other methods
-$('select#payment').on('change', function() {
+$('select#payment').on('change', function () {
 
     let selected = $('#payment :selected').val();
     let paymentList = ["credit-card", "paypal", "bitcoin"];
@@ -172,17 +169,9 @@ $('select#payment').on('change', function() {
 })
 
 
-
-
-
-
-
-
-
 ///////////////////////////////
 //Validation
 ///////////////////////////////
-
 
 
 ///////////////////////////////
@@ -233,8 +222,6 @@ const $ccCVVLabel = $ccCVVInput.prev();
 $ccCVVLabel.html("CVV:");
 
 
-
-
 function showApplicableErrorMessages() {
     console.log('showApplicableErrorMessages()')
     //check each field and show needed messages
@@ -269,7 +256,7 @@ function showHideErrorMessages() {
     });
 
     //Credit card live validation
-    
+
     $ccNumberInput.on('blur', () => {
         checkccNumber();
     });
@@ -293,7 +280,6 @@ function showHideErrorMessages() {
 
 
 }
-
 
 
 //DONE
@@ -397,10 +383,6 @@ function checkccCVV() {
 }
 
 
-
-
-
-
 function checkNumberField(number, lowerCount, upperCount) {
     if (number.length <= upperCount && number.length >= lowerCount) {
         return true;
@@ -429,15 +411,9 @@ function submitValidation() {
         validCreditCardNumber &&
         validCreditCardZip &&
         validCreditCardCVV) {
-            console.log('submit form now');
-        }
+        console.log('submit form now');
+    }
 }
-
-
-
-
-
-
 
 
 showHideErrorMessages();
