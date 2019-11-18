@@ -19,8 +19,8 @@ My main work was done in `script.js`. I progressively added features to the form
     - payment method info updates based on payment method selection
     - validation messages appear and disappear without having to hit 'Submit'
     - 'Register' button checks form validation before submitting
-- progressive enhancement: form works without JS
-- form validation
+
+- Form validation
     - name field must be filled
     - email field must have valid email
     - job role (if 'other') must be filled
@@ -30,5 +30,6 @@ My main work was done in `script.js`. I progressively added features to the form
         - card number must have 13-16 digits
         - zip must have 5 digits
         - CVV must have 3-4 digits
+- Progressive enhancement: form works without JS
 
 ### Extra Credit
