@@ -12,6 +12,12 @@ $('#bitcoin').hide();
 $('label[for="other-title"]').hide();
 $('#other-title').hide();
 
+//hide shirt color select
+
+$('#color').hide();
+$('label[for="color"]').hide();
+
+
 // shows other job field if 'Other' title is chosen
 $('#title').on('change', function() {
     if ($('#title :selected').val() == "other") {
@@ -24,23 +30,31 @@ $('#title').on('change', function() {
 });
 
 
+//when design field is selected, show color picker
+
+
 //when shirt design field in changed, update available colors
 $('#design').on('change', function() {
 
+    
     const selectedShirtDesign = $('#design :selected').val();
     //show all items in dropdown menu
-    $('.js-puns').show();
-    $('.i-love-js').show();
+    $('.js-puns').hide();
+    $('.i-love-js').hide();
     //reset selected option
 
     $('#color').val('chooseColor');
 
     //selectively hide options based on what is selected
     if (selectedShirtDesign === "js puns") {
-        $('.i-love-js').hide();
+        $('#color').show();
+        $('label[for="color"]').show();
+        $('.js-puns').show();
     }
     if (selectedShirtDesign === "heart js") {
-        $('.js-puns').hide();
+        $('#color').show();
+        $('label[for="color"]').show();
+        $('.i-love-js').show();
     }
 });
 
@@ -137,6 +151,11 @@ $('select#payment').on('change', function() {
     $('#paypal').html("<p>We'll take you to Paypal's site to set up your billing information when you click “Register” below.</p>");
     $('#bitcoin').html("<p>Since you selected Bitcoin we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>")
 })
+
+
+
+
+
 
 
 
@@ -251,9 +270,10 @@ function checkActivities() {
     const $activitiesList = $('fieldset.activities input');
     $activitiesList.each((index, value) => {
         if ($activitiesList[index].checked === true) {
-            return true;
+            $activitiesLabel.html("Register for Activities");
+            break;
         } else {
-            $activitiesLabel.html("Register for Activities <span class='red'>(at least one required)</span>")
+            $activitiesLabel.html("Register for Activities <span class='red'>(at least one required)</span>");
         }
     })
 }
