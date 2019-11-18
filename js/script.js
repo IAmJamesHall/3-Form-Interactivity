@@ -217,6 +217,20 @@ $designLabel.html("Select design")
 const $activitiesLabel = $('fieldset.activities legend');
 $activitiesLabel.html("Register for Activities:");
 
+//CC NUMBER input
+const $ccNumberInput = $('#cc-num');
+const $ccNumberLabel = $ccNumberInput.prev();
+$ccNumberLabel.html("Card number:");
+
+//CC ZIP input
+const $ccZipInput = $('#zip');
+const $ccZipLabel = $ccZipInput.prev();
+$ccZipLabel.html("ZIP:");
+
+//CC CVV input
+const $ccCVVInput = $('#cvv');
+const $ccCVVLabel = $ccCVVInput.prev();
+$ccCVVLabel.html("CVV:");
 
 
 
@@ -252,10 +266,30 @@ function showHideErrorMessages() {
 
     $colorInput.on('click', () => {
         $colorLabel.html("Please select a color");
-    })
+    });
 
     //Credit card live validation
     
+    $ccNumberInput.on('blur', () => {
+        checkccNumber();
+    });
+    $ccNumberInput.on('focus', () => {
+        $ccNumberLabel.html("Card number:");
+    });
+
+    $ccZipInput.on('blur', () => {
+        checkccZip();
+    });
+    $ccZipInput.on('focus', () => {
+        $ccZipLabel.html('Zip code:');
+    });
+
+    $ccCVVInput.on('blur', () => {
+        checkccCVV();
+    });
+    $ccCVVInput.on('focus', () => {
+        $ccCVVLabel.html('CVV:');
+    })
 
 
 }
@@ -325,25 +359,22 @@ function checkActivities() {
     }
 }
 
-function checkCreditCardNumber() {
+function checkccNumber() {
     if ($('select#payment :selected').val() === "credit-card") {
         //check card number
-        if (checkNumber("#cc-num", 13, 16) === false) {
+        if (checkNumberField($ccNumberInput.val(), 13, 16) === false) {
             $('label[for="cc-num"]').html("Card Number <span class='red'>Must be between 13 and 16 digits</span>");
-
             return false;
         } else {
             $('label[for="cc-num"]').html("Card Number:");
             return true;
         }
-        
-
     }
 }
 
-function checkCreditCardZip() {
+function checkccZip() {
     if ($('select#payment :selected').val() === "credit-card") {
-        if (checkNumber("#zip", 5, 5) === false) {
+        if (checkNumberField($ccZipInput.val(), 5, 5) === false) {
             $('label[for="zip"]').html("Zip code <span class='red'>Enter a valid zip code</span>");
             return false;
         } else {
@@ -353,15 +384,15 @@ function checkCreditCardZip() {
     }
 }
 
-function checkCreditCardCVV() {
+function checkccCVV() {
     if ($('select#payment :selected').val() === "credit-card") {
-
-        if (checkNumber("#cvv", 3, 4) === false) {
+        if (checkNumberField($ccCVVInput.val(), 3, 4) === false) {
             $('label[for="cvv"]').html("CVV <span class='red'>Enter valid CVV</span>");
             return false;
+        } else {
+            $('label[for="cvv"]').html("CVV:");
+            return true;
         }
-        return true;
-
     }
 }
 
@@ -370,8 +401,7 @@ function checkCreditCardCVV() {
 
 
 
-function checkNumber(element, lowerCount, upperCount) {
-    let number = $(element).val();
+function checkNumberField(number, lowerCount, upperCount) {
     if (number.length <= upperCount && number.length >= lowerCount) {
         return true;
     } else {
@@ -386,9 +416,9 @@ function submitValidation() {
     let validDesign = checkDesign();
     let validColor = checkColor();
     let validActivities = checkActivities();
-    let validCreditCardNumber = checkCreditCardNumber();
-    let validCreditCardZip = checkCreditCardZip();
-    let validCreditCardCVV = checkCreditCardCVV();
+    let validCreditCardNumber = checkccNumber();
+    let validCreditCardZip = checkccZip();
+    let validCreditCardCVV = checkccCVV();
 
     if (validName &&
         validEmail &&
