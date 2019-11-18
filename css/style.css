@@ -211,3 +211,11 @@ option {
 label {
 	color: white;
 }
+
+.disabled {
+	color: grey;
+}
+
+.enabled {
+	color: white;
+}

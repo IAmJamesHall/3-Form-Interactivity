@@ -16,6 +16,7 @@ $('#other-title').hide();
 
 $('#color').hide();
 $('label[for="color"]').hide();
+removeDesignFromColorSelector();
 
 
 // shows other job field if 'Other' title is chosen
@@ -27,7 +28,20 @@ $('#title').on('change', function() {
         $('label[for="other-title"]').hide();
         $('#other-title').hide();
     }
+    
 });
+
+function removeDesignFromColorSelector() {
+    const colorRegex = /[\w ♥️]+/;
+    const colorSelect = $('select#color');
+    
+    $('select#color').children().each((index, value) => {
+        let text = value.text;
+        text = text.replace(/ \([\w ♥️]+\)/, '');
+        value.text = text;
+    });
+
+}
 
 
 //when design field is selected, show color picker
@@ -50,12 +64,17 @@ $('#design').on('change', function() {
         $('#color').show();
         $('label[for="color"]').show();
         $('.js-puns').show();
-    }
-    if (selectedShirtDesign === "heart js") {
+    } else if (selectedShirtDesign === "heart js") {
         $('#color').show();
         $('label[for="color"]').show();
         $('.i-love-js').show();
+    } else {
+        const pleaseChooseDesign = document.createElement('option');
+        pleaseChooseDesign.text = "Please select a T-shirt design";
+
     }
+
+    
 });
 
 
@@ -134,7 +153,7 @@ function disableIfConflicting() {
 
     function enable(activity) {
         activity.removeAttribute("disabled"); //removes disabled attr
-        activity.parentElement.style.color = 'black';
+        activity.parentElement.style.color = 'white';
     }
 }
 
@@ -187,7 +206,12 @@ $jobLabel.html("Other Job Role:");
 //COLOR select
 const $colorInput = $('#color');
 const $colorLabel = $colorInput.prev();
-$colorLabel.html("Please select a color")
+$colorLabel.html("Select color")
+
+//DESIGN select
+const $designInput = $('#design');
+const $designLabel = $designInput.prev();
+$designLabel.html("Select design")
 
 //ACTIVITIES checkbox
 const $activitiesLabel = $('fieldset.activities legend');
@@ -226,9 +250,14 @@ function showHideErrorMessages() {
         $jobLabel.html("Other Job Role:");
     });
 
-    $colorInput.on('focus', () => {
-        $jobLabel.html("Please select a color");
+    $colorInput.on('click', () => {
+        $colorLabel.html("Please select a color");
     })
+
+    //Credit card live validation
+    
+
+
 }
 
 
@@ -239,6 +268,7 @@ function checkName() {
         return true;
     } else {
         $nameLabel.html("Name: <span class='red'>(name required)</span>");
+        return false;
     }
 }
 
@@ -247,6 +277,7 @@ function checkEmail() {
     let email = $emailInput.val();
     if (email.search(emailRegex)) {
         $emailLabel.html("Email: <span class='red'>(valid email required)</span>");
+        return false;
     } else {
         return true;
     }
@@ -257,42 +288,87 @@ function checkJob() {
         return true;
     } else {
         $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
+        return false;
     }
+}
+
+function checkDesign() {
+
+    if ($designInput.val() === "select design") {
+        $designLabel.html("<span class='red'>Please select a design</span>")
+        return false;
+    }
+    return true;
 }
 
 function checkColor() {
-    if ($colorInput.val() === "chooseColor") {
+    if ($colorInput.val() === "choose color") {
         $colorLabel.html("<span class='red'>Please select a color</span>")
+        return false;
     }
+    return true;
 }
 
 function checkActivities() {
+    let valid = false;
     const $activitiesList = $('fieldset.activities input');
     $activitiesList.each((index, value) => {
         if ($activitiesList[index].checked === true) {
-            $activitiesLabel.html("Register for Activities");
-            break;
-        } else {
-            $activitiesLabel.html("Register for Activities <span class='red'>(at least one required)</span>");
+            valid = true;
         }
     })
+
+    if (valid) {
+        $activitiesLabel.html("Register for Activities");
+    } else {
+        $activitiesLabel.html("Register for Activities <span class='red'>(at least one required)</span>");
+    }
 }
 
-function checkCreditCard() {
+function checkCreditCardNumber() {
     if ($('select#payment :selected').val() === "credit-card") {
         //check card number
         if (checkNumber("#cc-num", 13, 16) === false) {
             $('label[for="cc-num"]').html("Card Number <span class='red'>Must be between 13 and 16 digits</span>");
+
+            return false;
+        } else {
+            $('label[for="cc-num"]').html("Card Number:");
+            return true;
         }
-        if (checkNumber("#zip", 5, 5) === false) {
-            $('label[for="zip"]').html("Zip code <span class='red'>Enter a valid zip code</span>");
-        }
-        if (checkNumber("#cvv", 3, 4) === false) {
-            $('label[for="cvv"]').html("CVV <span class='red'>Enter valid CVV</span>");
-        }
+        
 
     }
 }
+
+function checkCreditCardZip() {
+    if ($('select#payment :selected').val() === "credit-card") {
+        if (checkNumber("#zip", 5, 5) === false) {
+            $('label[for="zip"]').html("Zip code <span class='red'>Enter a valid zip code</span>");
+            return false;
+        } else {
+            $('label[for="zip"]').html("Zip code:");
+            return true;
+        }
+    }
+}
+
+function checkCreditCardCVV() {
+    if ($('select#payment :selected').val() === "credit-card") {
+
+        if (checkNumber("#cvv", 3, 4) === false) {
+            $('label[for="cvv"]').html("CVV <span class='red'>Enter valid CVV</span>");
+            return false;
+        }
+        return true;
+
+    }
+}
+
+
+
+
+
 
 function checkNumber(element, lowerCount, upperCount) {
     let number = $(element).val();
@@ -304,12 +380,27 @@ function checkNumber(element, lowerCount, upperCount) {
 }
 
 function submitValidation() {
-    checkName();
-    checkEmail();
-    checkJob();
-    checkColor();
-    checkActivities();
-    checkCreditCard();
+    let validName = checkName();
+    let validEmail = checkEmail();
+    let validJob = checkJob();
+    let validDesign = checkDesign();
+    let validColor = checkColor();
+    let validActivities = checkActivities();
+    let validCreditCardNumber = checkCreditCardNumber();
+    let validCreditCardZip = checkCreditCardZip();
+    let validCreditCardCVV = checkCreditCardCVV();
+
+    if (validName &&
+        validEmail &&
+        validJob &&
+        validDesign &&
+        validColor &&
+        validActivities &&
+        validCreditCardNumber &&
+        validCreditCardZip &&
+        validCreditCardCVV) {
+            console.log('submit form now');
+        }
 }
 
 
