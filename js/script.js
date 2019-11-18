@@ -212,6 +212,7 @@ const $designLabel = $designInput.prev();
 $designLabel.html("Select design")
 
 //ACTIVITIES checkbox
+const $activitiesInput = $('fieldset.activities');
 const $activitiesLabel = $('fieldset.activities legend');
 $activitiesLabel.html("Register for Activities:");
 
@@ -260,9 +261,17 @@ function showHideErrorMessages() {
         $jobLabel.html("Other Job Role:");
     });
 
+    $designInput.on('click', () => {
+        $designLabel.html("Select design");
+    })
+
     $colorInput.on('click', () => {
         $colorLabel.html("Please select a color");
     });
+
+    $activitiesInput.on('click', () => {
+        checkActivities();
+    })
 
     //Credit card live validation
 
