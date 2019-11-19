@@ -2,8 +2,7 @@
 Treehouse Techdegree:
 FSJS project 3 - Forms Interactivity & Validation
 James Hall
-Nov 18, 2019
-******************************************/
+Nov 18, 2019 */
 
 
 /******************************************
@@ -16,18 +15,21 @@ $nameLabel.html("Name:");
 // focus on name field onload
 $nameInput.focus();
 
+// when focus leaves, check if valid
 $nameInput.on('blur', () => {
     checkName();
 });
+
+// on focus, clear warning
 $nameInput.on('focus', () => {
     $nameLabel.html("Name:");
 });
 
-
+// check name for validitiy
 function checkName() {
-    if ($nameInput.val()) {
+    if ($nameInput.val()) { 
         return true;
-    } else {
+    } else { // if invalid, provide warning
         $nameLabel.html("Name: <span class='red'>(name required)</span>");
         return false;
     }
@@ -39,25 +41,29 @@ EMAIL input */
 const $emailInput = $('#email');
 const $emailLabel = $emailInput.prev();
 $emailLabel.html("Email:");
-
-$emailInput.on('focus', () => {
-    $emailLabel.html("Email:");
-});
+// when focus leaves & on input, check if valid
+// this provides real-time error checking
 $emailInput.on('input blur', () => {
     checkEmail();
 })
+
+// on focus, clear warning
+$emailInput.on('focus', () => {
+    $emailLabel.html("Email:");
+});
+
 
 
 function checkEmail() {
     const emailRegex = /^[\w.+-]+@[\w.]+\.\w+$/;
     let email = $emailInput.val();
-    if (email === "") {
+    if (email === "") { // if email is blank, provide custom error message
         $emailLabel.html("<span class='red'>Email: (cannot be blank)</span>");
         return false;
-    } else if (email.search(emailRegex)) {
+    } else if (email.search(emailRegex)) { // if email is not valid, prompt the user
         $emailLabel.html("<span class='red'>Email: (must be in the form 'user@email.com')</span>");
         return false;
-    } else {
+    } else { // if valid email, clear warning
         $emailLabel.html("Email:");
         return true;
     }
@@ -72,7 +78,7 @@ const $jobLabel = $jobInput.prev();
 $jobLabel.html("Other Job Role:");
 
 
-// hide other job role field
+// hide custom job role input
 $('label[for="other-title"]').hide();
 $('#other-title').hide();
 
@@ -81,18 +87,23 @@ $('#other-title').hide();
 // shows other job field if 'Other' title is chosen
 $('#title').on('change', function () {
     if ($('#title :selected').val() == "other") {
+        // if 'other' is selected, show custom field 
         $('label[for="other-title"]').show();
         $('#other-title').show();
     } else {
+        //hide custom job field
         $('label[for="other-title"]').hide();
         $('#other-title').hide();
     }
 
 });
 
+// when focus leaves, check if valid
 $jobInput.on('blur', () => {
     checkJob();
 });
+
+// on focus, clear warning
 $jobInput.on('focus', () => {
     $jobLabel.html("Other Job Role:");
 });
@@ -102,7 +113,7 @@ $jobInput.on('focus', () => {
 function checkJob() {
     if ($jobInput.val()) {
         return true;
-    } else {
+    } else { // if empty job field, provide warning
         $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
         return false;
     }
