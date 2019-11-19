@@ -6,26 +6,76 @@ Nov 18, 2019
 ******************************************/
 
 
-//set totalPrice to initial price
-let totalPrice = 0;
+/******************************************
+NAME input */
+const $nameInput = $('#name');
+const $nameLabel = $nameInput.prev();
+$nameLabel.html("Name:");
 
 
 // focus on name field onload
-$('#name').focus();
+$nameInput.focus();
 
-// hide BTC & PayPal payment fields
-$('#paypal').hide();
-$('#bitcoin').hide();
+$nameInput.on('blur', () => {
+    checkName();
+});
+$nameInput.on('focus', () => {
+    $nameLabel.html("Name:");
+});
+
+
+function checkName() {
+    if ($nameInput.val()) {
+        return true;
+    } else {
+        $nameLabel.html("Name: <span class='red'>(name required)</span>");
+        return false;
+    }
+}
+
+
+/******************************************
+EMAIL input */
+const $emailInput = $('#email');
+const $emailLabel = $emailInput.prev();
+$emailLabel.html("Email:");
+
+$emailInput.on('focus', () => {
+    $emailLabel.html("Email:");
+});
+$emailInput.on('input blur', () => {
+    checkEmail();
+})
+
+
+function checkEmail() {
+    const emailRegex = /^[\w.+-]+@[\w.]+\.\w+$/;
+    let email = $emailInput.val();
+    if (email === "") {
+        $emailLabel.html("<span class='red'>Email: (cannot be blank)</span>");
+        return false;
+    } else if (email.search(emailRegex)) {
+        $emailLabel.html("<span class='red'>Email: (must be in the form 'user@email.com')</span>");
+        return false;
+    } else {
+        $emailLabel.html("Email:");
+        return true;
+    }
+}
+
+
+
+/******************************************
+JOB ROLE select */
+const $jobInput = $('#other-title');
+const $jobLabel = $jobInput.prev();
+$jobLabel.html("Other Job Role:");
+
 
 // hide other job role field
 $('label[for="other-title"]').hide();
 $('#other-title').hide();
 
-//hide shirt color select
-
-$('#color').hide();
-$('label[for="color"]').hide();
-removeDesignFromColorSelector();
 
 
 // shows other job field if 'Other' title is chosen
@@ -40,6 +90,48 @@ $('#title').on('change', function () {
 
 });
 
+$jobInput.on('blur', () => {
+    checkJob();
+});
+$jobInput.on('focus', () => {
+    $jobLabel.html("Other Job Role:");
+});
+
+
+
+function checkJob() {
+    if ($jobInput.val()) {
+        return true;
+    } else {
+        $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
+        return false;
+    }
+}
+
+
+/******************************************
+TSHIRT select */
+//DESIGN select
+const $designInput = $('#design');
+const $designLabel = $designInput.prev();
+$designLabel.html("Select design")
+
+//COLOR select
+const $colorInput = $('#color');
+const $colorLabel = $colorInput.prev();
+$colorLabel.html("Select color")
+
+
+
+
+//hide shirt color select
+$('#color').hide();
+$('label[for="color"]').hide();
+
+//remove redundant design names from color options
+removeDesignFromColorSelector();
+
+
 function removeDesignFromColorSelector() {
     const colorRegex = /[\w ♥️]+/;
     const colorSelect = $('select#color');
@@ -49,23 +141,17 @@ function removeDesignFromColorSelector() {
         text = text.replace(/ \([\w ♥️]+\)/, '');
         value.text = text;
     });
-
 }
 
-
-//when design field is selected, show color picker
 
 
 //when shirt design field in changed, update available colors
 $('#design').on('change', function () {
-
-
     const selectedShirtDesign = $('#design :selected').val();
     //show all items in dropdown menu
     $('.js-puns').hide();
     $('.i-love-js').hide();
     //reset selected option
-
     $('#color').val('chooseColor');
 
     //selectively hide options based on what is selected
@@ -85,6 +171,43 @@ $('#design').on('change', function () {
 
 
 });
+
+
+$designInput.on('click', () => {
+    $designLabel.html("Select design");
+})
+
+$colorInput.on('click', () => {
+    $colorLabel.html("Please select a color");
+});
+
+function checkDesign() {
+    if ($designInput.val() === "select design") {
+        $designLabel.html("<span class='red'>Please select a design</span>")
+        return false;
+    }
+    return true;
+}
+
+function checkColor() {
+    if ($colorInput.val() === "choose color") {
+        $colorLabel.html("<span class='red'>Please select a color</span>")
+        return false;
+    }
+    return true;
+}
+
+
+
+/******************************************
+ACTIVITIES fieldset */
+const $activitiesInput = $('fieldset.activities');
+const $activitiesLabel = $('fieldset.activities legend');
+$activitiesLabel.html("Register for Activities:");
+
+//set totalPrice to initial price
+let totalPrice = 0;
+
 
 
 //when activity is selected, add its cost to the totalPrice
@@ -163,189 +286,10 @@ function disableIfConflicting() {
     }
 }
 
-//when payment method is selected, hide other methods
-$('select#payment').on('change', function () {
-
-    let selected = $('#payment :selected').val();
-    let paymentList = ["credit-card", "paypal", "bitcoin"];
-    for (let i = 0; i < paymentList.length; i++) {
-        $('#' + paymentList[i]).hide();
-    }
-    $('#' + selected).show();
-
-    $('#paypal').html("<p>We'll take you to Paypal's site to set up your billing information when you click “Register” below.</p>");
-    $('#bitcoin').html("<p>Since you selected Bitcoin we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>")
+$activitiesInput.on('click', () => {
+    checkActivities();
 })
 
-
-///////////////////////////////
-//Validation
-///////////////////////////////
-
-
-///////////////////////////////
-//define variables & hide validation messages
-
-//NAME input
-const $nameInput = $('#name');
-const $nameLabel = $nameInput.prev();
-$nameLabel.html("Name:");
-
-//EMAIL input
-const $emailInput = $('#email');
-const $emailLabel = $emailInput.prev();
-$emailLabel.html("Email:");
-
-//JOB input
-const $jobInput = $('#other-title');
-const $jobLabel = $jobInput.prev();
-$jobLabel.html("Other Job Role:");
-
-//COLOR select
-const $colorInput = $('#color');
-const $colorLabel = $colorInput.prev();
-$colorLabel.html("Select color")
-
-//DESIGN select
-const $designInput = $('#design');
-const $designLabel = $designInput.prev();
-$designLabel.html("Select design")
-
-//ACTIVITIES checkbox
-const $activitiesInput = $('fieldset.activities');
-const $activitiesLabel = $('fieldset.activities legend');
-$activitiesLabel.html("Register for Activities:");
-
-//CC NUMBER input
-const $ccNumberInput = $('#cc-num');
-const $ccNumberLabel = $ccNumberInput.prev();
-$ccNumberLabel.html("Card number:");
-
-//CC ZIP input
-const $ccZipInput = $('#zip');
-const $ccZipLabel = $ccZipInput.prev();
-$ccZipLabel.html("ZIP:");
-
-//CC CVV input
-const $ccCVVInput = $('#cvv');
-const $ccCVVLabel = $ccCVVInput.prev();
-$ccCVVLabel.html("CVV:");
-
-
-function showApplicableErrorMessages() {
-    console.log('showApplicableErrorMessages()')
-    //check each field and show needed messages
-}
-
-function showHideErrorMessages() {
-    //show/hide messages when input is selected or text box is focused/blurred
-
-    $nameInput.on('blur', () => {
-        checkName();
-    });
-    $nameInput.on('focus', () => {
-        $nameLabel.html("Name:");
-    });
-    $emailInput.on('focus', () => {
-        $emailLabel.html("Email:");
-    });
-    $emailInput.on('input', () => {
-        checkEmail();
-    })
-
-    $jobInput.on('blur', () => {
-        checkJob();
-    });
-    $jobInput.on('focus', () => {
-        $jobLabel.html("Other Job Role:");
-    });
-
-    $designInput.on('click', () => {
-        $designLabel.html("Select design");
-    })
-
-    $colorInput.on('click', () => {
-        $colorLabel.html("Please select a color");
-    });
-
-    $activitiesInput.on('click', () => {
-        checkActivities();
-    })
-
-    //Credit card live validation
-
-    $ccNumberInput.on('blur', () => {
-        checkccNumber();
-    });
-    $ccNumberInput.on('focus', () => {
-        $ccNumberLabel.html("Card number:");
-    });
-
-    $ccZipInput.on('blur', () => {
-        checkccZip();
-    });
-    $ccZipInput.on('focus', () => {
-        $ccZipLabel.html('Zip code:');
-    });
-
-    $ccCVVInput.on('blur', () => {
-        checkccCVV();
-    });
-    $ccCVVInput.on('focus', () => {
-        $ccCVVLabel.html('CVV:');
-    })
-
-
-}
-
-
-//DONE
-function checkName() {
-    if ($nameInput.val()) {
-        return true;
-    } else {
-        $nameLabel.html("Name: <span class='red'>(name required)</span>");
-        return false;
-    }
-}
-
-function checkEmail() {
-    const emailRegex = /^[\w.+-]+@[\w.]+\.\w+$/;
-    let email = $emailInput.val();
-     if (email.search(emailRegex)) {
-        $emailLabel.html("<span class='red'>Email: (must be in the form 'user@email.com')</span>");
-        return false;
-    } else {
-        $emailLabel.html("Email:");
-        return true;
-    }
-}
-
-function checkJob() {
-    if ($jobInput.val()) {
-        return true;
-    } else {
-        $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
-        return false;
-    }
-}
-
-function checkDesign() {
-
-    if ($designInput.val() === "select design") {
-        $designLabel.html("<span class='red'>Please select a design</span>")
-        return false;
-    }
-    return true;
-}
-
-function checkColor() {
-    if ($colorInput.val() === "choose color") {
-        $colorLabel.html("<span class='red'>Please select a color</span>")
-        return false;
-    }
-    return true;
-}
 
 function checkActivities() {
     let valid = false;
@@ -363,6 +307,53 @@ function checkActivities() {
     }
 }
 
+
+/******************************************
+CREDIT CARD select */
+// hide BTC & PayPal payment fields
+$('#paypal').hide();
+$('#bitcoin').hide();
+
+
+//when payment method is selected, hide other methods
+$('select#payment').on('change', function () {
+
+    let selected = $('#payment :selected').val();
+    let paymentList = ["credit-card", "paypal", "bitcoin"];
+    for (let i = 0; i < paymentList.length; i++) {
+        $('#' + paymentList[i]).hide();
+    }
+    $('#' + selected).show();
+
+    $('#paypal').html("<p>We'll take you to Paypal's site to set up your billing information when you click “Register” below.</p>");
+    $('#bitcoin').html("<p>Since you selected Bitcoin we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>")
+})
+
+
+function checkNumberField(number, lowerCount, upperCount) {
+    if (number.length <= upperCount && number.length >= lowerCount) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+/******************************************
+CREDIT CARD NUMBER input */
+const $ccNumberInput = $('#cc-num');
+const $ccNumberLabel = $ccNumberInput.prev();
+$ccNumberLabel.html("Card number:");
+
+$ccNumberInput.on('blur', () => {
+    checkccNumber();
+});
+$ccNumberInput.on('focus', () => {
+    $ccNumberLabel.html("Card number:");
+});
+
+
 function checkccNumber() {
     if ($('select#payment :selected').val() === "credit-card") {
         //check card number
@@ -378,6 +369,22 @@ function checkccNumber() {
     }
 }
 
+
+
+/******************************************
+CREDIT CARD ZIP input */
+const $ccZipInput = $('#zip');
+const $ccZipLabel = $ccZipInput.prev();
+$ccZipLabel.html("ZIP:");
+
+$ccZipInput.on('blur', () => {
+    checkccZip();
+});
+$ccZipInput.on('focus', () => {
+    $ccZipLabel.html('Zip code:');
+});
+
+
 function checkccZip() {
     if ($('select#payment :selected').val() === "credit-card") {
         if (checkNumberField($ccZipInput.val(), 5, 5) === false) {
@@ -389,6 +396,22 @@ function checkccZip() {
         }
     }
 }
+
+
+/******************************************
+CREDIT CARD CVV input */
+const $ccCVVInput = $('#cvv');
+const $ccCVVLabel = $ccCVVInput.prev();
+$ccCVVLabel.html("CVV:");
+
+
+$ccCVVInput.on('blur', () => {
+    checkccCVV();
+});
+$ccCVVInput.on('focus', () => {
+    $ccCVVLabel.html('CVV:');
+})
+
 
 function checkccCVV() {
     if ($('select#payment :selected').val() === "credit-card") {
@@ -403,14 +426,8 @@ function checkccCVV() {
 }
 
 
-function checkNumberField(number, lowerCount, upperCount) {
-    if (number.length <= upperCount && number.length >= lowerCount) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
+/******************************************
+SUBMIT button input */
 function submitValidation() {
     let validName = checkName();
     let validEmail = checkEmail();
@@ -436,7 +453,7 @@ function submitValidation() {
 }
 
 
-showHideErrorMessages();
+
 $('form').on('submit', (e) => {
     e.preventDefault();
     submitValidation();
