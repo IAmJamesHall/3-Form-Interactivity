@@ -33,3 +33,6 @@ My main work was done in `script.js`. I progressively added features to the form
 - Progressive enhancement: form works without JS
 
 ### Extra Credit
+- hides the t-shirt 'color' menu until a design has been chosen
+- conditional error message on CC # input
+- real-time error message on email input

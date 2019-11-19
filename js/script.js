@@ -246,13 +246,12 @@ function showHideErrorMessages() {
     $nameInput.on('focus', () => {
         $nameLabel.html("Name:");
     });
-
-    $emailInput.on('blur', () => {
-        checkEmail();
-    });
     $emailInput.on('focus', () => {
         $emailLabel.html("Email:");
     });
+    $emailInput.on('input', () => {
+        checkEmail();
+    })
 
     $jobInput.on('blur', () => {
         checkJob();
@@ -313,10 +312,11 @@ function checkName() {
 function checkEmail() {
     const emailRegex = /^[\w.+-]+@[\w.]+\.\w+$/;
     let email = $emailInput.val();
-    if (email.search(emailRegex)) {
-        $emailLabel.html("Email: <span class='red'>(valid email required)</span>");
+     if (email.search(emailRegex)) {
+        $emailLabel.html("<span class='red'>Email: (must be in the form 'user@email.com')</span>");
         return false;
     } else {
+        $emailLabel.html("Email:");
         return true;
     }
 }
@@ -366,7 +366,9 @@ function checkActivities() {
 function checkccNumber() {
     if ($('select#payment :selected').val() === "credit-card") {
         //check card number
-        if (checkNumberField($ccNumberInput.val(), 13, 16) === false) {
+        if (checkNumberField($ccNumberInput.val(), 0, 0) === true) {
+            $('label[for="cc-num"]').html("Card Number <span class='red'>Enter your credit card number</span>");
+        } else if (checkNumberField($ccNumberInput.val(), 13, 16) === false) {
             $('label[for="cc-num"]').html("Card Number <span class='red'>Must be between 13 and 16 digits</span>");
             return false;
         } else {
