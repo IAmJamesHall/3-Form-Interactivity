@@ -2,7 +2,7 @@
 Treehouse Techdegree:
 FSJS project 3 - Forms Interactivity & Validation
 James Hall
-Nov 20, 2019 */
+Submitted Nov 20, 2019 */
 
 
 /******************************************
