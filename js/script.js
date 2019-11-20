@@ -183,26 +183,27 @@ $('#design').on('change', function () {
 
 });
 
-
+// on click, clear warnings
 $designInput.on('click', () => {
     $designLabel.html("Select design");
 })
 
+// on click, clear warnings
 $colorInput.on('click', () => {
-    $colorLabel.html("Please select a color");
+    $colorLabel.html("Select color");
 });
 
 function checkDesign() {
-    if ($designInput.val() === "select design") {
-        $designLabel.html("<span class='red'>Please select a design</span>")
+    if ($designInput.val() === "select design") { // if design not selected, show warning
+        $designLabel.html("<span class='red'>Select design</span>")
         return false;
     }
     return true;
 }
 
 function checkColor() {
-    if ($colorInput.val() === "choose color") {
-        $colorLabel.html("<span class='red'>Please select a color</span>")
+    if ($colorInput.val() === "choose color") { // if color not selected, show warning
+        $colorLabel.html("<span class='red'>Select color</span>")
         return false;
     }
     return true;
@@ -220,18 +221,17 @@ $activitiesLabel.html("Register for Activities:");
 let totalPrice = 0;
 
 
-
 //when activity is selected, add its cost to the totalPrice
 $('.activities').on('change', (e) => {
     let cost = e.target.dataset.cost;
     cost = parseInt(cost.slice(1, 4));
-
+    // add or subtract cost, based on whether it was checked or unchecked
     if (e.target.checked) {
         totalPrice += cost;
     } else {
         totalPrice -= cost;
     }
-    $('#payment-total').html('$' + totalPrice);
+    $('#payment-total').html('$' + totalPrice); //update price on page
 });
 
 //when activity is selected, disable conflicting activities
@@ -241,13 +241,19 @@ $('fieldset.activities').on('change', (event) => {
 
 
 function disableIfConflicting() {
-    const $elementList = $('input[data-day-and-time]');
+    const $elementList = $('input[data-day-and-time]'); // grab all elements with a date+time
+
+    // this loop goes through each activity and compares it with all other activities
+    // if an unchecked activity conflicts with another activity that is checked, 
+    // it disables the unchecked activity
     $elementList.each(function (i, selectedActivity) {
         let selectedShouldBeDisabled = false;
         if (selectedActivity.checked === false) {
             $elementList.each(function (j, otherActivity) {
                 if (otherActivity.checked === true) {
-                    if (checkIfTimeConflicts(selectedActivity, otherActivity)) {
+                    let selectedTimeDate = extractDateObjects(selectedActivity.dataset.dayAndTime);
+                    let otherTimeDate = extractDateObjects(otherActivity.dataset.dayAndTime);
+                    if (checkIfTimeConflicts(selectedTimeDate, otherTimeDate)) {
                         selectedShouldBeDisabled = true;
                     }
                 }
@@ -255,13 +261,15 @@ function disableIfConflicting() {
         }
         if (selectedShouldBeDisabled) {
             disable(selectedActivity);
-            selectedShouldBeDisabled = false;
+            selectedShouldBeDisabled = false; // set up the loop for the next element
         } else {
-            enable(selectedActivity);
+            enable(selectedActivity); // if an element does not conflict with any other checked elements, enable it
         }
     })
 
 
+    // this functions takes a time+date string (loosely ISO 8601), extracts a start & end time,
+    // and creates two JS time objects with it returns in an object
     function extractDateObjects(timeString) {
         let regex = /(\d{4}-\d\d-\d\d)(T\d\d:\d\d:\d\d)-(T\d\d:\d\d:\d\d)/g;
         let match = regex.exec(timeString);
@@ -274,10 +282,9 @@ function disableIfConflicting() {
         }
     }
 
-    function checkIfTimeConflicts(selectedActivity, otherActivity) {
-        let selectedTimes = extractDateObjects(selectedActivity.dataset.dayAndTime);
-        let otherTimes = extractDateObjects(otherActivity.dataset.dayAndTime);
-        if (selectedTimes.start > otherTimes.end || selectedTimes.end < otherTimes.start) {
+    // this function takes two dates and checks if they overlap
+    function checkIfTimeConflicts(oneTimeDate, otherTimeDate) {
+        if (oneTimeDate.start > otherTimeDate.end || oneTimeDate.end < otherTimeDate.start) {
             return false;
         } else {
             return true;
@@ -297,11 +304,13 @@ function disableIfConflicting() {
     }
 }
 
+// when an activity is clicked, check all activities
 $activitiesInput.on('click', () => {
     checkActivities();
 })
 
 
+// this checks to see that there is at least 1 activity checked
 function checkActivities() {
     let valid = false;
     const $activitiesList = $('fieldset.activities input');
@@ -311,6 +320,8 @@ function checkActivities() {
         }
     })
 
+    // if at least 1 activity is checked, remove warning
+    // otherwise, add a warning
     if (valid) {
         $activitiesLabel.html("Register for Activities");
     } else {
