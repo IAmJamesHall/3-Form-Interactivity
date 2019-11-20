@@ -36,3 +36,11 @@ My main work was done in `script.js`. I progressively added features to the form
 - hides the t-shirt 'color' menu until a design has been chosen
 - conditional error message on CC # input
 - real-time error message on email input
+
+
+### Changes to the Provided Template
+- mildly changed styling
+- added extra activites as test cases for my conflicting date/time code
+- changed `data-day-and-time` property to more closely follow ISO 8601 standards
+- changed some tags, etc. to make code easier to work with & more uniform
+- added less severe warning messages directly into HTML for progressive enhancement
