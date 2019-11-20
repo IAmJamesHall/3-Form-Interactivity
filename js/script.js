@@ -167,7 +167,7 @@ $('#design').on('change', function () {
     $('.js-puns').hide();
     $('.i-love-js').hide();
     //reset selected option
-    $('#color').val('chooseColor');
+    $('#color').val('choose color');
 
     //selectively hide options based on what is selected
     if (selectedShirtDesign === "js puns") {
@@ -402,6 +402,8 @@ function checkccNumber() {
             $('label[for="cc-num"]').html("Card Number:");
             return true;
         }
+    } else {
+        return true;
     }
 }
 
@@ -433,6 +435,8 @@ function checkccZip() {
             $('label[for="zip"]').html("Zip code:");
             return true;
         }
+    } else {
+        return true;
     }
 }
 
@@ -463,6 +467,8 @@ function checkccCVV() {
             $('label[for="cvv"]').html("CVV:");
             return true;
         }
+    } else {
+        return true;
     }
 }
 
