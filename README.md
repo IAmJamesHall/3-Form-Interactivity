@@ -40,6 +40,7 @@ My main work was done in `script.js`. I progressively added features to the form
 
 
 ### Changes to the Provided Template
+- form now has the name 'form' 
 - styling is mildly changed
 - added extra activites as test cases for my overlapping date/time code
 - changed `data-day-and-time` property to more closely follow ISO 8601 standards

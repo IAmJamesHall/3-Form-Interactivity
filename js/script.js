@@ -2,7 +2,7 @@
 Treehouse Techdegree:
 FSJS project 3 - Forms Interactivity & Validation
 James Hall
-Nov 18, 2019 */
+Nov 20, 2019 */
 
 
 /******************************************
@@ -111,11 +111,15 @@ $jobInput.on('focus', () => {
 
 
 function checkJob() {
-    if ($jobInput.val()) {
+    if ($('#title :selected').val() === "other") {
+        if ($jobInput.val()) {
+            return true;
+        } else { // if empty job field, provide warning
+            $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
+            return false;
+        }
+    } else {
         return true;
-    } else { // if empty job field, provide warning
-        $jobLabel.html("Other Job Role: <span class='red'>(type your job role)</span>");
-        return false;
     }
 }
 
@@ -324,8 +328,10 @@ function checkActivities() {
     // otherwise, add a warning
     if (valid) {
         $activitiesLabel.html("Register for Activities");
+        return true;
     } else {
         $activitiesLabel.html("Register for Activities <span class='red'>(at least one required)</span>");
+        return false;
     }
 }
 
@@ -340,19 +346,25 @@ $('#bitcoin').hide();
 //when payment method is selected, hide other methods
 $('select#payment').on('change', function () {
 
+    //hide all payment methods
     let selected = $('#payment :selected').val();
     let paymentList = ["credit-card", "paypal", "bitcoin"];
     for (let i = 0; i < paymentList.length; i++) {
         $('#' + paymentList[i]).hide();
     }
+
+    //show only selected payment method
     $('#' + selected).show();
 
+    //change the paypal and bitcoin text to be more friendly
+    //while leaving the original HTML intact for progressive enhancement
     $('#paypal').html("<p>We'll take you to Paypal's site to set up your billing information when you click “Register” below.</p>");
     $('#bitcoin').html("<p>Since you selected Bitcoin we'll take you to the Coinbase site to set up your billing information. Due to the nature of exchanging Bitcoin, all Bitcoin transactions will be final.</p>")
 })
 
-
-function checkNumberField(number, lowerCount, upperCount) {
+//check the length of number is between lowerCount and upperCount
+//this function is used in all the credit card fields
+function checkNumberLength(number, lowerCount, upperCount) {
     if (number.length <= upperCount && number.length >= lowerCount) {
         return true;
     } else {
@@ -368,23 +380,25 @@ const $ccNumberInput = $('#cc-num');
 const $ccNumberLabel = $ccNumberInput.prev();
 $ccNumberLabel.html("Card number:");
 
+//on blur, check if valid
 $ccNumberInput.on('blur', () => {
     checkccNumber();
 });
+//on focus, clear warnings
 $ccNumberInput.on('focus', () => {
     $ccNumberLabel.html("Card number:");
 });
 
-
+//check card number
 function checkccNumber() {
     if ($('select#payment :selected').val() === "credit-card") {
-        //check card number
-        if (checkNumberField($ccNumberInput.val(), 0, 0) === true) {
+        
+        if (checkNumberLength($ccNumberInput.val(), 0, 0) === true) { //if cc# field is blank, show custom warning
             $('label[for="cc-num"]').html("Card Number <span class='red'>Enter your credit card number</span>");
-        } else if (checkNumberField($ccNumberInput.val(), 13, 16) === false) {
+        } else if (checkNumberLength($ccNumberInput.val(), 13, 16) === false) { // if cc# is the wrong length, show custom warning
             $('label[for="cc-num"]').html("Card Number <span class='red'>Must be between 13 and 16 digits</span>");
             return false;
-        } else {
+        } else { // if cc# is valid
             $('label[for="cc-num"]').html("Card Number:");
             return true;
         }
@@ -399,9 +413,12 @@ const $ccZipInput = $('#zip');
 const $ccZipLabel = $ccZipInput.prev();
 $ccZipLabel.html("ZIP:");
 
+// on blur, check number
 $ccZipInput.on('blur', () => {
     checkccZip();
 });
+
+// on focus, clear warnings
 $ccZipInput.on('focus', () => {
     $ccZipLabel.html('Zip code:');
 });
@@ -409,10 +426,10 @@ $ccZipInput.on('focus', () => {
 
 function checkccZip() {
     if ($('select#payment :selected').val() === "credit-card") {
-        if (checkNumberField($ccZipInput.val(), 5, 5) === false) {
+        if (checkNumberLength($ccZipInput.val(), 5, 5) === false) { //if ccZip is not 5 digits long, show warning
             $('label[for="zip"]').html("Zip code <span class='red'>Enter a valid zip code</span>");
             return false;
-        } else {
+        } else { // if ccZip is 5 digits long
             $('label[for="zip"]').html("Zip code:");
             return true;
         }
@@ -426,10 +443,12 @@ const $ccCVVInput = $('#cvv');
 const $ccCVVLabel = $ccCVVInput.prev();
 $ccCVVLabel.html("CVV:");
 
-
+//on blur, check if valid
 $ccCVVInput.on('blur', () => {
     checkccCVV();
 });
+
+//on focus, clear warnings
 $ccCVVInput.on('focus', () => {
     $ccCVVLabel.html('CVV:');
 })
@@ -437,10 +456,10 @@ $ccCVVInput.on('focus', () => {
 
 function checkccCVV() {
     if ($('select#payment :selected').val() === "credit-card") {
-        if (checkNumberField($ccCVVInput.val(), 3, 4) === false) {
+        if (checkNumberLength($ccCVVInput.val(), 3, 4) === false) { //if ccCVV is not valid, show warning
             $('label[for="cvv"]').html("CVV <span class='red'>Enter valid CVV</span>");
             return false;
-        } else {
+        } else { // if ccCVV is valid
             $('label[for="cvv"]').html("CVV:");
             return true;
         }
@@ -450,7 +469,9 @@ function checkccCVV() {
 
 /******************************************
 SUBMIT button input */
-function submitValidation() {
+
+//on submit, check all fields for validity
+function finalValidation() {
     let validName = checkName();
     let validEmail = checkEmail();
     let validJob = checkJob();
@@ -470,13 +491,17 @@ function submitValidation() {
         validCreditCardNumber &&
         validCreditCardZip &&
         validCreditCardCVV) {
-        console.log('submit form now');
+        return true
     }
+    return false;
 }
 
 
 
+//event listener to run validation before submitting form
 $('form').on('submit', (e) => {
     e.preventDefault();
-    submitValidation();
+    if (finalValidation()) {
+        document.form.submit();
+    }
 });
