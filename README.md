@@ -1,6 +1,7 @@
-!(Status: Submitted)[https://img.shields.io/badge/status-submitted-green]
+
 # Team Treehouse Project 3
 ## Form Interactivity & Validation
+![Submitted](https://img.shields.io/badge/status-submitted-green)
 
 
 This project started with a simple form and I added interactivity & validation.
